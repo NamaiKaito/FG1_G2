@@ -614,9 +614,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
-	//uint32_t noon = TextureManager::Load("noon.png");
-	//Sprite* sprite = Sprite::Create(noon, {0.0f, 0.0f});
-	//sprite->SetTextureRect({0, 0}, {1280, 720});
+	uint32_t noon = TextureManager::Load("noon.png");
+	Sprite* sprite = Sprite::Create(noon, {0.0f, 0.0f});
+	sprite->SetTextureRect({0, 0}, {1280, 720});
 	WNDCLASSEXW wc = {};
 	wc.cbSize = sizeof(WNDCLASSEXW);
 	wc.lpfnWndProc = WndProc;
@@ -678,15 +678,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
 		// 描画開始
 		// スプライト描画前処理
 
-		//Sprite::PreDraw();
+		Sprite::PreDraw();
 
 		// スプライトを描画
 
-		//sprite->Draw();
+		sprite->Draw();
 
 		// スプライト描画後処理
 
-		//Sprite::PostDraw();
+		Sprite::PostDraw();
 	}
 	//delete sprite;
 	SelectObject(backDC, oldBackBmp);
