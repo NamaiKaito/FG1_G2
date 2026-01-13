@@ -23,9 +23,90 @@ enum class GameState { Title, Explanation, Play, GameOver };
 
 // ---- ヘルパー: RGB によるブラシ作成 ----
 static HBRUSH CreateSolidBrushRGB(int r, int g, int b) { return CreateSolidBrush(RGB(r, g, b)); }
-
-// ---- Game クラス ----
+//タイトル
+uint32_t textureTitle_ = 0;
+KamataEngine::Sprite* spriteTitle_ = nullptr;
+uint32_t textureEnter_ = 0;
+KamataEngine::Sprite* spriteEnter_ = nullptr;
+//説明
+uint32_t textureExplanation_ = 0;
+KamataEngine::Sprite* spriteExplanation_ = nullptr;
+uint32_t textureRule_ = 0;
+KamataEngine::Sprite* spriteRule_ = nullptr;
+//結果
+uint32_t textureResult_ = 0;
+KamataEngine::Sprite* spriteResult_ = nullptr;
+//昼
+uint32_t textureNoon_ = 0;
+KamataEngine::Sprite* spriteNoon_ = nullptr;
+//夜
+uint32_t textureNight_ = 0;
+KamataEngine::Sprite* spriteNight_ = nullptr;
+//朝
+uint32_t textureMorning_ = 0;
+KamataEngine::Sprite* spriteMorning_ = nullptr;
+//ゲームオーバー
+uint32_t textureGameOver_ = 0;
+KamataEngine::Sprite* spriteGameOver_ = nullptr;
+//プレイヤー
+uint32_t texturePlayer_ = 0;
+KamataEngine::Sprite* spritePlayer_ = nullptr;
+//横向きプレイヤー
+uint32_t texturePlayer2_ = 0;
+KamataEngine::Sprite* spritePlayer2_ = nullptr;
+//ステータス
+uint32_t textureStatus_ = 0;
+KamataEngine::Sprite* spriteStatus_ = nullptr;
+//ポイント
+uint32_t texturePoint_ = 0;
+KamataEngine::Sprite* spritePoint_ = nullptr;
+//HP
+uint32_t textureLife_ = 0;
+KamataEngine::Sprite* spriteLife_ = nullptr;
+//回復
+uint32_t textureHeal_ = 0;
+KamataEngine::Sprite* spriteHeal_ = nullptr;
+//剣
+uint32_t textureSword_ = 0;
+KamataEngine::Sprite* spriteSword_ = nullptr;
+//攻撃力UP
+uint32_t textureAttack_ = 0;
+KamataEngine::Sprite* spriteAttack_ = nullptr;
+//鎧
+uint32_t textureArmor_ = 0;
+KamataEngine::Sprite* spriteArmor_ = nullptr;
+//防御力UP
+uint32_t textureDefense_ = 0;
+KamataEngine::Sprite* spriteDefense_ = nullptr;
+//盾
+//uint32_t textureShield_ = 0;
+//KamataEngine::Sprite* spriteShield_ = nullptr;
+//ゾンビ
+uint32_t textureZombie_ = 0;
+KamataEngine::Sprite* spriteZombie_ = nullptr;
+//スケルトン
+uint32_t textureSkeleton_ = 0;
+KamataEngine::Sprite* spriteSkeleton_ = nullptr;
+//狼男
+uint32_t textureWerewolf_ = 0;
+KamataEngine::Sprite* spriteWerewolf_ = nullptr;
+//死神
+uint32_t textureReaper_ = 0;
+KamataEngine::Sprite* spriteReaper_ = nullptr;
+//数字
+uint32_t textureNumber_ = 0;
+KamataEngine::Sprite* spriteDayNumber_[2] = {};
+KamataEngine::Sprite* spriteHPNumber_[3] = {};
+KamataEngine::Sprite* spriteAttackNumber_[3] = {};
+KamataEngine::Sprite* spriteDefenseNumber_[3] = {};
+KamataEngine::Sprite* spritePointNumber_[3] = {};
+KamataEngine::Sprite* spriteAttackCostNumber_[1] = {};
+KamataEngine::Sprite* spriteDefenseCostNumber_[1] = {};
+KamataEngine::Sprite* spriteHPCostNumber_[1] = {};
+KamataEngine::Vector2 size = {32.0f, 64.0f};
+    // ---- Game クラス ----
 class Game {
+	
 	public:
 	Game() {
 		std::random_device rd;
@@ -45,16 +126,242 @@ class Game {
 			DeleteObject(defaultFont_);
 	}
 	
-	void LoadResources(HINSTANCE hInstance, HWND hwnd) {
-		(void)hwnd;
+	void LoadResources() {
+		//シーン
+		textureTitle_ = TextureManager::Load("title_bannin.png");
+		spriteTitle_ = Sprite::Create(textureTitle_, {0, 0});
 
-		titleBitmap_ = (HBITMAP)LoadImageW(hInstance, MAKEINTRESOURCEW(IDB_TITLE), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR);
+		textureEnter_ = TextureManager::Load("enter.png");
+		spriteEnter_ = Sprite::Create(textureEnter_, {0, 0});
 
-		titleFont_ = CreateFontW(48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Meiryo UI");
+		textureExplanation_ = TextureManager::Load("explanation.png");
+		spriteExplanation_ = Sprite::Create(textureExplanation_, {0, 0});
 
-		defaultFont_ = CreateFontW(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Meiryo UI");
+		textureResult_ = TextureManager::Load("result.png");
+		spriteResult_ = Sprite::Create(textureResult_, {120, -120});
+
+		textureRule_ = TextureManager::Load("rule.png");
+		spriteRule_ = Sprite::Create(textureRule_, {0, 0});
+
+		textureNoon_ = TextureManager::Load("noon.png");
+		spriteNoon_ = Sprite::Create(textureNoon_, {0, 0});
+
+		textureNight_ = TextureManager::Load("night.png");
+		spriteNight_ = Sprite::Create(textureNight_, {0, 0});
+
+		textureMorning_ = TextureManager::Load("morning.png");
+		spriteMorning_ = Sprite::Create(textureMorning_, {0, 0});
+
+		textureGameOver_ = TextureManager::Load("gameOver.png");
+		spriteGameOver_ = Sprite::Create(textureGameOver_, {0, 0});
+		//フォント
+		textureStatus_ = TextureManager::Load("status.png");
+		spriteStatus_ = Sprite::Create(textureStatus_, {20, 0});
+
+		textureHeal_ = TextureManager::Load("heal.png");
+		spriteHeal_ = Sprite::Create(textureHeal_, {10, 298});
+
+		textureLife_ = TextureManager::Load("life.png");
+		spriteLife_ = Sprite::Create(textureLife_, {10, 55});
+
+		textureSword_ = TextureManager::Load("sword.png");
+		spriteSword_ = Sprite::Create(textureSword_, {10, 95});
+
+		textureAttack_ = TextureManager::Load("attack.png");
+		spriteAttack_ = Sprite::Create(textureAttack_, {10, 220});
+
+		textureArmor_ = TextureManager::Load("armor.png");
+		spriteArmor_ = Sprite::Create(textureArmor_, {10, 135});
+
+		textureDefense_ = TextureManager::Load("defense.png");
+		spriteDefense_ = Sprite::Create(textureDefense_, {10, 255});
+
+		///*textureShield_ = TextureManager::Load("shield.png");
+		//spriteShield_ = Sprite::Create(textureShield_, {10, 192});*/
+
+		texturePoint_ = TextureManager::Load("point.png");
+		spritePoint_ = Sprite::Create(texturePoint_, {10,175});
+		//プレイヤー
+		texturePlayer_ = TextureManager::Load("player.png");
+		spritePlayer_ = Sprite::Create(texturePlayer_, {2000, 50});
+
+		texturePlayer2_ = TextureManager::Load("player2.png");
+		spritePlayer2_ = Sprite::Create(texturePlayer2_, {1100, 300});
+		//敵キャラ
+		textureZombie_ = TextureManager::Load("zombie.png");
+		spriteZombie_ = Sprite::Create(textureZombie_, {0, 0});
+
+		textureSkeleton_ = TextureManager::Load("skeleton.png");
+		spriteSkeleton_ = Sprite::Create(textureSkeleton_, {0, 64});
+
+		textureWerewolf_ = TextureManager::Load("wolf.png");
+		spriteWerewolf_ = Sprite::Create(textureWerewolf_, {0, 128});
+
+		textureReaper_ = TextureManager::Load("reaper.png");
+		spriteReaper_ = Sprite::Create(textureReaper_, {0, 192});
+		//数字
+		textureNumber_ = TextureManager::Load("number.png");
+
+		for (int i = 0; i < 2; i++) {
+			spriteDayNumber_[i] = Sprite::Create(textureNumber_, {100.0f + size.x * i, 3});
+			spriteDayNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 2; i++) {
+			spriteDayNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 3; i++) {
+			spriteHPNumber_[i] = Sprite::Create(textureNumber_, {92.0f + size.x * i, 42});
+			spriteHPNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteHPNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 3; i++) {
+			spriteAttackNumber_[i] = Sprite::Create(textureNumber_, {125.0f + size.x * i, 82});
+			spriteAttackNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteAttackNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 3; i++) {
+			spriteDefenseNumber_[i] = Sprite::Create(textureNumber_, {144.0f + size.x * i, 122});
+			spriteDefenseNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteDefenseNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 3; i++) {
+			spritePointNumber_[i] = Sprite::Create(textureNumber_, {125.0f + size.x * i, 162});
+			spritePointNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 3; i++) {
+			spritePointNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 1; i++) {
+			spriteAttackCostNumber_[i] = Sprite::Create(textureNumber_, {302.0f + size.x * i, 203});
+			spriteAttackCostNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteAttackCostNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 1; i++) {
+			spriteDefenseCostNumber_[i] = Sprite::Create(textureNumber_, {320.0f + size.x * i, 245});
+			spriteDefenseCostNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteDefenseCostNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
+
+		for (int i = 0; i < 1; i++) {
+			spriteHPCostNumber_[i] = Sprite::Create(textureNumber_, {260.0f + size.x * i, 285});
+			spriteHPCostNumber_[i]->SetSize({32.0f, 64.0f});
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteHPCostNumber_[i]->SetTextureRect({0, 0}, {32, 64});
+		}
 	}
-
+	void DrawDayNumber(int number) { 
+		int32_t digit = 10;
+		for (int i = 0; i < 2;i++) {
+			int nowNumber = number/ digit;
+			spriteDayNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x,size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 2; i++) {
+			spriteDayNumber_[i]->Draw();
+		}
+	}
+	void DrawHPNumber(int number) {
+		int32_t digit = 100;
+		for (int i = 0; i < 3; i++) {
+			int nowNumber = number / digit;
+			spriteHPNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteHPNumber_[i]->Draw();
+		}
+	}
+	void DrawAttackNumber(int number) {
+		int32_t digit = 100;
+		for (int i = 0; i < 3; i++) {
+			int nowNumber = number / digit;
+			spriteAttackNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteAttackNumber_[i]->Draw();
+		}
+	}
+	void DrawDefenseNumber(int number) {
+		int32_t digit = 100;
+		for (int i = 0; i < 3; i++) {
+			int nowNumber = number / digit;
+			spriteDefenseNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 3; i++) {
+			spriteDefenseNumber_[i]->Draw();
+		}
+	}
+	void DrawPointNumber(int number) {
+		int32_t digit = 100;
+		for (int i = 0; i < 3; i++) {
+			int nowNumber = number / digit;
+			spritePointNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 3; i++) {
+			spritePointNumber_[i]->Draw();
+		}
+	}
+	void DrawAttackCostNumber(int number) {
+		int32_t digit = 1;
+		for (int i = 0; i < 1; i++) {
+			int nowNumber = number / digit;
+			spriteAttackCostNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteAttackCostNumber_[i]->Draw();
+		}
+	}
+	void DrawDefenseCostNumber(int number) {
+		int32_t digit = 1;
+		for (int i = 0; i < 1; i++) {
+			int nowNumber = number / digit;
+			spriteDefenseCostNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteDefenseCostNumber_[i]->Draw();
+		}
+	}
+	void DrawHPCostNumber(int number) {
+		int32_t digit = 1;
+		for (int i = 0; i < 1; i++) {
+			int nowNumber = number / digit;
+			spriteHPCostNumber_[i]->SetTextureRect({size.x * nowNumber, 0}, {size.x, size.y});
+			number %= digit;
+			digit /= 10;
+		}
+		for (int i = 0; i < 1; i++) {
+			spriteHPCostNumber_[i]->Draw();
+		}
+	}
 	void Reset() {
 		state_ = GameState::Title;
 		phase_ = TimePhase::Day;
@@ -77,19 +384,19 @@ class Game {
 
 		eventMessage_.clear();
 
-		balls_.clear();
+		enemies_.clear();
 	}
 
-	void Update(const std::array<BYTE, 256>& keys, const std::array<BYTE, 256>& preKeys) {
+	void Update() {
 		switch (state_) {
 		case GameState::Title:
-			if (IsKeyTriggered(keys, preKeys, VK_RETURN)) {
+			if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 				state_ = GameState::Explanation;
 			}
 			break;
 
 		case GameState::Explanation:
-			if (IsKeyTriggered(keys, preKeys, VK_RETURN)) {
+			if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 				state_ = GameState::Play;
 				phase_ = TimePhase::Day;
 				phaseTimer_ = 600;
@@ -97,60 +404,64 @@ class Game {
 				baseHP_ = 100;
 				points_ = 5;
 				eventMessage_.clear();
-				SpawnBalls(); // 初期スポーン
+				SpawnEnemies(); // 初期スポーン
 			}
 			break;
 
 		case GameState::Play:
-			UpdatePlay(keys, preKeys);
+			UpdatePlay();
 			if (baseHP_ <= 0) {
 				state_ = GameState::GameOver;
 			}
 			break;
 
 		case GameState::GameOver:
-			if (IsKeyTriggered(keys, preKeys, VK_RETURN)) {
+			if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 				Reset();
 			}
 			break;
 		}
 	}
 
-	void Draw(HDC backDC, int backW, int backH) {
+	void Draw() {
 		
-		HFONT oldFont = nullptr;
+		/*HFONT oldFont = nullptr;
 		if (defaultFont_)
-			oldFont = (HFONT)SelectObject(backDC, defaultFont_);
+			oldFont = (HFONT)SelectObject(backDC, defaultFont_);*/
 
 		switch (state_) {
 		case GameState::Title:
-			DrawTitle(backDC, backW, backH);
+			spriteTitle_->Draw();
+			spriteEnter_->Draw();
 			break;
 		case GameState::Explanation:
-			DrawExplanation(backDC);
+			spriteExplanation_->Draw();
+			spriteRule_->Draw();
 			break;
 		case GameState::Play:
-			DrawPlay(backDC);
+			DrawPlay();
 			break;
 		case GameState::GameOver:
-			DrawGameOver(backDC);
+			spriteGameOver_->Draw();
 			break;
 		}
 
-		if (oldFont)
-			SelectObject(backDC, oldFont);
+		/*if (oldFont)
+			SelectObject(backDC, oldFont);*/
 	}
 
 private:
-	// ---------- ボール関連 ----------
-	struct Ball {
+	// ---------- 敵関連 ----------
+	struct Enemy {
 		float x;
 		float y;
 		float speed; // px / フレーム
-		int type;    // 0 = red, 1 = blue, 2 = gray, 3 = yellow
+		int type;    // 0 = ゾンビ, 1 = スケルトン, 2 = 狼男, 3 = 死神
+		KamataEngine::Sprite* sprite = nullptr;
+
 	};
 
-	std::vector<Ball> balls_;
+	std::vector<Enemy> enemies_;
 
 	// 夜のフレーム数（コード内の設定に合わせる）
 	static constexpr int kNightFramesDefault = 300;
@@ -166,13 +477,13 @@ private:
 		return distance / frames;
 	}
 
-	void SpawnBalls() {
-		balls_.clear();
+	void SpawnEnemies() {
+		enemies_.clear();
 
-		int redCount = 3;
-		int blueCount = (dayCount_ >= 6) ? 2 : 0;
-		int grayCount = (dayCount_ >= 11) ? 2 : 0;
-		int yellowCount = (dayCount_ >= 16) ? 1 : 0;
+		int zombieCount = 3;
+		int skeletonCount = (dayCount_ >= 6) ? 2 : 0;
+		int wolfCount = (dayCount_ >= 11) ? 2 : 0;
+		int reaperCount = (dayCount_ >= 16) ? 1 : 0;
 
 		// グレー基準速度を計算
 		float graySpeed = ComputeGraySpeed();
@@ -182,27 +493,32 @@ private:
 		float blueSpeed = graySpeed * 0.70f;   // 次
 		float yellowSpeed = graySpeed * 0.90f; // 次
 		// graySpeed は最速
-
+		float y = 100.0f;
 		// RNG: 左半分からランダムにスタートする（0 .. kWindowWidth/2 - 1）
 		std::uniform_int_distribution<int> distX(0, kWindowWidth / 2 - 1);
 		std::uniform_int_distribution<int> distY(0, kWindowHeight - 64);
-
-		for (int i = 0; i < redCount; ++i) {
-			balls_.push_back(Ball{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), redSpeed, 0});
+		KamataEngine::Sprite* spriteZombie = nullptr;
+		
+		for (int i = 0; i < zombieCount; ++i) {
+			spriteZombie = Sprite::Create(textureZombie_, {0, 0});
+			enemies_.push_back(Enemy{static_cast<float>(distX(rng_)), y, redSpeed, 0,spriteZombie_});
+			y += 50.0f;
+			delete spriteZombie;
 		}
-		for (int i = 0; i < blueCount; ++i) {
-			balls_.push_back(Ball{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), blueSpeed, 1});
+		for (int i = 0; i < skeletonCount; ++i) {
+			enemies_.push_back(Enemy{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), blueSpeed, 1,spriteZombie});
 		}
-		for (int i = 0; i < grayCount; ++i) {
-			balls_.push_back(Ball{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), graySpeed, 2});
+		for (int i = 0; i < wolfCount; ++i) {
+			enemies_.push_back(Enemy{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), graySpeed, 2, spriteZombie});
 		}
-		for (int i = 0; i < yellowCount; ++i) {
-			balls_.push_back(Ball{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), yellowSpeed, 3});
+		for (int i = 0; i < reaperCount; ++i) {
+			enemies_.push_back(Enemy{static_cast<float>(distX(rng_)), static_cast<float>(distY(rng_)), yellowSpeed, 3, spriteZombie});
 		}
+		
 	}
 
 	void UpdateBallsDuringNight() {
-		for (auto& b : balls_) {
+		for (auto& b : enemies_) {
 			b.x += b.speed;
 			// 右端を超えたら簡易的に画面外へ送り出す（念のため）
 			if (b.x > kWindowWidth + 64.0f) {
@@ -211,32 +527,37 @@ private:
 		}
 	}
 
-	void DrawBalls(HDC hdc) {
+	void MoveEnemies() { 
+		for (auto& b : enemies_) {
+			b.x += b.speed;
+			b.sprite->SetPosition({b.x, b.y});
+		}
+	}
+
+	void DrawEnemies() {
 		// 64x64 の丸を各色で描画（ブラシを都度作って削除）
-		for (const auto& b : balls_) {
-			HBRUSH brush = nullptr;
-			switch (b.type) {
-			case 0:
-				brush = CreateSolidBrushRGB(220, 30, 30);
-				break; // 赤
-			case 1:
-				brush = CreateSolidBrushRGB(30, 120, 220);
-				break; // 青
-			case 2:
-				brush = CreateSolidBrushRGB(170, 170, 170);
-				break; // グレー
-			case 3:
-				brush = CreateSolidBrushRGB(240, 200, 40);
-				break; // 黄
-			default:
-				brush = CreateSolidBrushRGB(255, 255, 255);
-				break;
-			}
-			HBRUSH old = (HBRUSH)SelectObject(hdc, brush);
+		for (const auto& b : enemies_) {
+			/*Sprite* brush = nullptr;*/
+			//switch (b.type) {
+			//case 0:
+			//	spriteZombie_->Draw();
+			//	break; // ゾンビ
+			//case 1:
+			//	spriteSkeleton_->Draw();
+			//	break; // スケルトン
+			//case 2:
+			//	spriteWerewolf_->Draw();
+			//	break; // 狼男
+			//case 3:
+			//	spriteReaper_->Draw();
+			//	break; // 死神
+			//}
+			/*HBRUSH old = (HBRUSH)SelectObject(hdc, brush);*/
 			// Ellipse の矩形を 64x64 に調整
-			Ellipse(hdc, (int)b.x, (int)b.y, (int)(b.x + 64.0f), (int)(b.y + 64.0f));
-			SelectObject(hdc, old);
-			DeleteObject(brush);
+			/*Ellipse(hdc, (int)b.x, (int)b.y, (int)(b.x + 64.0f), (int)(b.y + 64.0f));
+			SelectObject(hdc, old);*/
+			/*DeleteObject(brush);*/
+			b.sprite->Draw();
 		}
 	}
 
@@ -248,7 +569,7 @@ private:
 		points_ += lastEarnedPoints_;
 		eventMessage_.clear();
 
-		SpawnBalls();
+		SpawnEnemies();
 	}
 
 	void StartNight() {
@@ -284,7 +605,7 @@ private:
 		HandleEvent();
 	}
 
-	void UpdatePlay(const std::array<BYTE, 256>& keys, const std::array<BYTE, 256>& preKeys) {
+	void UpdatePlay() {
 		int attackCost = playerAttack_ / 100 + 1;
 		int defenseCost = baseDefense_ / 100 + 1;
 
@@ -299,49 +620,84 @@ private:
 
 			phaseTimer_--;
 
-			if (IsKeyTriggered(keys, preKeys, '1') && points_ >= attackCost) {
+			if (Input::GetInstance()->TriggerKey(DIK_1) && points_ >= attackCost) {
 				playerAttack_ += 2;
 				points_ -= attackCost;
 			}
-			if (IsKeyTriggered(keys, preKeys, '2') && points_ >= defenseCost) {
+			if (Input::GetInstance()->TriggerKey(DIK_2) && points_ >= defenseCost) {
 				baseDefense_ += 2;
 				points_ -= defenseCost;
 			}
-			if (IsKeyTriggered(keys, preKeys, '3') && points_ > 0) {
+			if (Input::GetInstance()->TriggerKey(DIK_3) && points_ > 0) {
 				baseHP_ += 10;
 				if (baseHP_ > 200)
 					baseHP_ = 200;
 				points_ -= 1;
 			}
 
-			if (IsKeyTriggered(keys, preKeys, 'R')) {
+			if (Input::GetInstance()->TriggerKey(DIK_R)) {
 				points_ = dayPointsBackup_;
 				playerAttack_ = attackBackup_;
 				baseDefense_ = defenseBackup_;
 				baseHP_ = baseHPBackup_;
 			}
 
-			if (IsKeyTriggered(keys, preKeys, VK_RETURN) || phaseTimer_ <= 0) {
+			if (Input::GetInstance()->TriggerKey(DIK_RETURN) || phaseTimer_ <= 0) {
 				StartNight();
 			}
 			break;
 
 		case TimePhase::Night:
 			nightTimer_--;
-			// 夜中はボールを動かす
 			UpdateBallsDuringNight();
+			MoveEnemies();
 			if (nightTimer_ <= 0)
 				StartResult();
 			break;
 
 		case TimePhase::Result:
-			if (IsKeyTriggered(keys, preKeys, VK_RETURN)) {
+			if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 				StartDay();
 			}
 			break;
 		}
 	}
 
+	void DrawPlay() {
+		switch (phase_) {
+		case TimePhase::Day:
+			spriteNoon_->Draw();
+			spriteHeal_->Draw();
+			spriteLife_->Draw();
+			spriteSword_->Draw();
+			spriteArmor_->Draw();
+			spritePoint_->Draw();
+			spriteAttack_->Draw();
+			spriteDefense_->Draw();
+			spritePlayer_->Draw();
+			spriteStatus_->Draw();
+			DrawDayNumber(dayCount_);
+			DrawHPNumber(baseHP_);
+			DrawAttackNumber(playerAttack_);
+			DrawDefenseNumber(baseDefense_);
+			DrawPointNumber(points_);
+			DrawAttackCostNumber(playerAttack_ / 100 + 1);
+			DrawDefenseCostNumber(baseDefense_ / 100 + 1);
+			DrawHPCostNumber(1);
+			break;
+
+		case TimePhase::Night:
+			spriteNight_->Draw();
+			spritePlayer2_->Draw();
+			DrawEnemies();
+			break;
+
+		case TimePhase::Result:
+			spriteMorning_->Draw();
+			spriteResult_->Draw();
+			break;
+		}
+	}
 	void HandleEvent() {
 		eventMessage_.clear();
 
@@ -485,33 +841,6 @@ private:
 		buf = L"Points: " + std::to_wstring(points_);
 		TextOutW(hdc, 20, 100, buf.c_str(), (int)buf.size());
 
-		// ================================
-		// ★ 白丸をフェーズごとに配置する処理を変更
-		//  昼: 画面中央
-		//  夜: 画面の右1/4中央（x = 3/4 * width の位置に 64x64 を中央揃えで描画）
-		//  朝(Result): 昼と同じ（中央）
-		// ================================
-		{
-			int cx, cy;
-			int radius = 32; // 半径 32 => 直径 64 (64x64)
-			cy = kWindowHeight / 2;
-
-			// ◆ 白丸の描画（昼・夜のみ表示 → Result では描かない）
-			if (phase_ == TimePhase::Night) { 
-				// 右1/4の中央に配置する -> x = 3/4 * width の中心位置 
-				cx = (kWindowWidth * 3) / 4; 
-			} else 
-			{   // 昼・朝は中央 
-				cx = kWindowWidth / 2;
-			}
-			// Ellipse expects left, top, right, bottom
-			HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-			HBRUSH old = (HBRUSH)SelectObject(hdc, whiteBrush);
-			Ellipse(hdc, cx - radius, cy - radius, cx + radius, cy + radius);
-			SelectObject(hdc, old);
-			DeleteObject(whiteBrush);
-		}
-
 		// ===== 以下いつものUI描画 =====
 
 		if (phase_ == TimePhase::Day) {
@@ -535,7 +864,7 @@ private:
 			TextOutW(hdc, 20, 160, L"Enemies attack... Survive until morning!", 41);
 
 			// 夜は色付きボール（敵）を描画（位置は夜中に毎フレーム更新される）
-			DrawBalls(hdc);
+			DrawEnemies();
 
 		} else if (phase_ == TimePhase::Result) {
 			TextOutW(hdc, 20, 140, L"=== Morning Report ===", 23);
@@ -612,88 +941,128 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	}
 	return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
-	uint32_t noon = TextureManager::Load("noon.png");
-	Sprite* sprite = Sprite::Create(noon, {0.0f, 0.0f});
-	sprite->SetTextureRect({0, 0}, {1280, 720});
-	WNDCLASSEXW wc = {};
-	wc.cbSize = sizeof(WNDCLASSEXW);
-	wc.lpfnWndProc = WndProc;
-	wc.hInstance = hInstance;
-	wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-	wc.lpszClassName = kWindowClassName;
-	RegisterClassExW(&wc);
+	// エンジンの初期化
+	Initialize(L"夜の番人");
 
-	RECT wr = {0, 0, kWindowWidth, kWindowHeight};
-	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
-	HWND hwnd = CreateWindowW(kWindowClassName, kWindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top, NULL, NULL, hInstance, NULL);
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-	if (!hwnd)
-		return -1;
-
-	ShowWindow(hwnd, SW_SHOW);
-	UpdateWindow(hwnd);
-
-	HDC frontDC = GetDC(hwnd);
-	HDC backDC = CreateCompatibleDC(frontDC);
-	HBITMAP backBitmap = CreateCompatibleBitmap(frontDC, kWindowWidth, kWindowHeight);
-	HBITMAP oldBackBmp = (HBITMAP)SelectObject(backDC, backBitmap);
-
+	//// ゲームシーンのインスタンス生成
+	//GameScene* gameScene = new GameScene();
+	//// ゲームシーンの初期化
+	//gameScene->Initialize();
 	Game game;
-	game.LoadResources(hInstance, hwnd);
-
-	std::array<BYTE, 256> keys = {};
-	std::array<BYTE, 256> preKeys = {};
-
-	bool running = true;
-	MSG msg = {};
-
-	const int targetFPS = 60;
-	const int frameMs = 1000 / targetFPS;
-
-	while (running) {
-		while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
-			if (msg.message == WM_QUIT)
-				running = false;
-			TranslateMessage(&msg);
-			DispatchMessageW(&msg);
+	game.LoadResources();
+	// メインループ
+	while (true) {
+		// エンジンの更新
+		if (Update()) {
+			break;
 		}
-
-		preKeys = keys;
-		for (int i = 0; i < 256; ++i)
-			keys[i] = (GetAsyncKeyState(i) & 0x8000) ? 1 : 0;
-
-		if (keys[VK_ESCAPE] && !preKeys[VK_ESCAPE])
-			running = false;
-
-		game.Update(keys, preKeys);
-
-		game.Draw(backDC, kWindowWidth, kWindowHeight);
-
-		BitBlt(frontDC, 0, 0, kWindowWidth, kWindowHeight, backDC, 0, 0, SRCCOPY);
-
-		Sleep(frameMs);
+		// ゲームシーンの更新
+		game.Update();
+		//
+				
 		// 描画開始
-		// スプライト描画前処理
-
+		dxCommon->PreDraw();
 		Sprite::PreDraw();
-
-		// スプライトを描画
-
-		sprite->Draw();
-
-		// スプライト描画後処理
-
+		// ゲームシーンの描画
+		game.Draw();
 		Sprite::PostDraw();
+		// 描画終了
+		dxCommon->PostDraw();
 	}
-	//delete sprite;
-	SelectObject(backDC, oldBackBmp);
-	DeleteObject(backBitmap);
-	DeleteDC(backDC);
-	ReleaseDC(hwnd, frontDC);
-
-	DestroyWindow(hwnd);
+	// ゲームシーンの解放
+	//delete gameScene;
+	//// nullptrの代入
+	//gameScene = nullptr;
+	// エンジンの終了処理
+	Finalize();
+	delete spriteTitle_;
+	delete spriteExplanation_;
+	delete spriteNoon_;
+	delete spriteNight_;
+	delete spriteMorning_;
+	delete spriteGameOver_;
+	delete spritePlayer_;
+	delete spritePlayer2_;
+	delete spriteHeal_;
+	delete spriteArmor_;
+	/*delete spriteShield_;*/
+	delete spriteSword_;
+	delete spriteZombie_;
+	delete spriteSkeleton_;
+	delete spriteWerewolf_;
+	delete spriteReaper_;
 	return 0;
 }
+
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
+//	WNDCLASSEXW wc = {};
+//	wc.cbSize = sizeof(WNDCLASSEXW);
+//	wc.lpfnWndProc = WndProc;
+//	wc.hInstance = hInstance;
+//	wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
+//	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+//	wc.lpszClassName = kWindowClassName;
+//	RegisterClassExW(&wc);
+//
+//	RECT wr = {0, 0, kWindowWidth, kWindowHeight};
+//	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+//	HWND hwnd = CreateWindowW(kWindowClassName, kWindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top, NULL, NULL, hInstance, NULL);
+//
+//	if (!hwnd)
+//		return -1;
+//
+//	ShowWindow(hwnd, SW_SHOW);
+//	UpdateWindow(hwnd);
+//
+//	HDC frontDC = GetDC(hwnd);
+//	HDC backDC = CreateCompatibleDC(frontDC);
+//	HBITMAP backBitmap = CreateCompatibleBitmap(frontDC, kWindowWidth, kWindowHeight);
+//	HBITMAP oldBackBmp = (HBITMAP)SelectObject(backDC, backBitmap);
+//
+//	Game game;
+//	game.LoadResources(hInstance, hwnd);
+//
+//	std::array<BYTE, 256> keys = {};
+//	std::array<BYTE, 256> preKeys = {};
+//
+//	bool running = true;
+//	MSG msg = {};
+//
+//	const int targetFPS = 60;
+//	const int frameMs = 1000 / targetFPS;
+//
+//	while (running) {
+//		while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE)) {
+//			if (msg.message == WM_QUIT)
+//				running = false;
+//			TranslateMessage(&msg);
+//			DispatchMessageW(&msg);
+//		}
+//
+//		preKeys = keys;
+//		for (int i = 0; i < 256; ++i)
+//			keys[i] = (GetAsyncKeyState(i) & 0x8000) ? 1 : 0;
+//
+//		if (keys[VK_ESCAPE] && !preKeys[VK_ESCAPE])
+//			running = false;
+//
+//		game.Update(keys, preKeys);
+//
+//		game.Draw(backDC, kWindowWidth, kWindowHeight);
+//
+//		BitBlt(frontDC, 0, 0, kWindowWidth, kWindowHeight, backDC, 0, 0, SRCCOPY);
+//
+//		Sleep(frameMs);
+//	}
+//	SelectObject(backDC, oldBackBmp);
+//	DeleteObject(backBitmap);
+//	DeleteDC(backDC);
+//	ReleaseDC(hwnd, frontDC);
+//
+//	DestroyWindow(hwnd);
+//	return 0;
+//}
